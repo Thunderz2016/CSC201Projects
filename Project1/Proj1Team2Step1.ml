@@ -26,12 +26,18 @@
 
 
 (*<variable>*) 
+datatype variable = var of string; 
 (*<IntegerConstant>*)
+type integerConstant = int;
 (*<BooleanConstant>*)
+type booleanConstant = bool; 
 
 (*<ArithmaticOp>*)
+datatype arithmaticOp = Plus| Minus| Times| Div;
 (*<RelationalOp>*)
+datatype relationalOp = Lt| Le | Eq | Ne | Ge | Gt; 
 (*<BooleanOp>*)
+datatype booleanOp = And | Or; 
 
 (*<IntegerExpression>*)
 datatype integerExpression = intExp1 of integerConstant |
