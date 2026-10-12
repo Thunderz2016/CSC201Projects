@@ -52,11 +52,11 @@ datatype booleanExpression = boolExp1 of booleanConstant |
 
 (*<Instruction>*)
 datatype instruction = Skip |
-                        inst1 of (variable * integerExpression) |
-                        inst2 of (variable * booleanExpression) |
-                        inst3 of instruction list |
-                        inst4 of (instruction * instruction * booleanExpression) |
-                        inst5 of (instruction * booleanExpression);
+                        inst2 of (variable * integerExpression) |
+                        inst3 of (variable * booleanExpression) |
+                        inst4 of instruction list | (*sequence*)
+                        inst5 of (instruction * instruction * booleanExpression) |  (*if/else*)
+                        inst6 of (instruction * booleanExpression);  (*for while loop*)
 
 (*<TypeName>*)
 datatype typeName = TypeName1Boolean | TypeName2Integer;
