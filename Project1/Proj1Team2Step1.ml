@@ -66,7 +66,9 @@ type declaration = variable * typeName;
 
 
 (*<DeclarationList>*)
+type declarationList = declaration list;
 (*<Program>*)
+type program = declarationList * instruction;
                             
 
 
