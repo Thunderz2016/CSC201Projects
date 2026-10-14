@@ -67,8 +67,49 @@ type declaration = variable * typeName;
 
 (*<DeclarationList>*)
 type declarationList = declaration list;
+
 (*<Program>*)
 type program = declarationList * instruction;
+
+(* Create the variables *)
+val v_num = var "num";
+val v_rem = var "rem";
+val v_sum = var "sum";
+val v_n = var "n";
+val v_result = var "result";
+
+(* Declare them *)
+val declarations : declarationList =
+    [(v_num, TypeName2Integer),
+     (v_rem, TypeName2Integer),
+     (v_sum, TypeName2Integer),
+     (v_n, TypeName2Integer),
+     (v_result, TypeName1Boolean)];
+
+(* Create the Integer Contraints and Expressions *)
+val int_156 : integerExpression =
+    intExp1 156;
+val int_0 : integerExpression =
+    intExp1 0;
+
+val exp_num : integerExpression =
+    intExp2 v_num;
+val exp_rem : integerExpression =
+    intExp2 v_rem;
+val exp_sum : integerExpression =
+    intExp2 v_sum;
+val exp_n : integerExpression =
+    intExp2 v_n;
+
+(* Assign the integer values *)
+val num_156 : instruction =
+    inst2 (v_num, intExp1 156);
+val rem_0 : instruction =
+    inst2 (v_rem, intExp1 0);
+val sum_0 : instruction =
+    inst2 (v_sum, intExp1 0);
+val n_num : instruction =
+    inst2 (v_n, intExp2 v_num);
                             
 
 
