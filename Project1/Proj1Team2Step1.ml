@@ -48,7 +48,7 @@ datatype integerExpression = intExp1 of integerConstant |
 datatype booleanExpression = boolExp1 of booleanConstant |
                             boolExp2 of variable |
                             boolExp3 of (relationalOp * integerExpression * integerExpression) |
-                            boolExp4 of (booleanOp * integerExpression * integerExpression);
+                            boolExp4 of (booleanOp * booleanExpression * booleanExpression);
 
 (*<Instruction>*)
 datatype instruction = Skip |
@@ -91,6 +91,8 @@ val int_156 : integerExpression =
     intExp1 156;
 val int_0 : integerExpression =
     intExp1 0;
+val int_10 : integerExpression = 
+    intExp1 10;
 
 val exp_num : integerExpression =
     intExp2 v_num;
@@ -110,6 +112,32 @@ val sum_0 : instruction =
     inst2 (v_sum, intExp1 0);
 val n_num : instruction =
     inst2 (v_n, intExp2 v_num);
+
+(* WHILE*)
+val whileLoopBoolExp : booleanExpression =
+    boolExp3 (Gt, exp_num, int_0);
+
+val numDivTen : integerExpression =
+    intExp3 (Div, v_num, int_10);
+val tenTimesNumDivTen : integerExpression =
+    intExp3 (Times, int_10, numDivTen);
+val numMinusTenTimesNumDivTen : integerExpression =
+    intExp3 (Minus, v_num, tenTimesNumDivTen);  (*num Minus 10 Times (num Div 10)*)
+
+val sumPlusRem : integerExpression =
+    intExp3 (Plus, v_sum, v_rem);
+
+val whileLoopInstList : instruction = 
+    inst4 ([ inst2 (v_rem, numMinusTenTimesNumDivTen),   (*rem = (num Minus 10 Times (num Div 10))*)
+             inst2 (v_sum, sumPlusRem), (*sum = sum Plus rem*)
+             inst2 (v_num, numDivTen)]);   (*num = num Div 10*)
+val whileLoop : instruction =
+    inst6 (whileLoopInstList, whileLoopBoolExp);
+
+(* IF/ELSE*)
+
+(*Last Line: val teamTwoProgram = (declist, programbody) : program *)
+
                             
 
 
