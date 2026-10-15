@@ -135,10 +135,39 @@ val whileLoopInstList : instruction =
 val whileLoop : instruction =
     inst6 (whileLoopInstList, whileLoopBoolExp);
 
-(* IF/ELSE*)
+
+(* IF/ELSE *)
+
+(* n Div sum *)
+val nDivSum : integerExpression =
+    intExp3 (Div, exp_n, exp_sum);
+
+(* sum Times (n Div sum) *)
+val sumTimesNDivSum : integerExpression =
+    intExp3 (Times, exp_sum, nDivSum);
+
+(* n Minus sum Times (n Div sum) *)
+val nMinusSumTimesNDivSum : integerExpression =
+    intExp3 (Minus, exp_n, sumTimesNDivSum);
+
+(* (n Minus sum Times (n Div sum)) Eq 0 *)
+val ifCondition : booleanExpression =
+    boolExp3 (Eq, nMinusSumTimesNDivSum, int_0);
+
+(* THEN result = True *)
+val thenInstruction : instruction =
+    inst3 (v_result, boolExp1 true);
+
+(* ELSE result = False *)
+val elseInstruction : instruction =
+    inst3 (v_result, boolExp1 false);
+
+(* Complete IF/ELSE *)
+val ifElseInstruction : instruction =
+    inst5 (thenInstruction, elseInstruction, ifCondition);
 
 (*Last Line: val teamTwoProgram = (declist, programbody) : program *)
 
-                            
+val teamTwoProgram =  (declarations,programBody): program;              
 
 
