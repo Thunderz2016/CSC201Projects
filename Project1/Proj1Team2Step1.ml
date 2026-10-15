@@ -126,7 +126,7 @@ val numMinusTenTimesNumDivTen : integerExpression =
     intExp3 (Minus, exp_num, tenTimesNumDivTen);  (*num Minus 10 Times (num Div 10)*)
 
 val sumPlusRem : integerExpression =
-    intExp3 (Plus, exp_num, exp_rem);
+    intExp3 (Plus, exp_sum, exp_rem);
 
 val whileLoopInstList : instruction = 
     inst4 ([ inst2 (v_rem, numMinusTenTimesNumDivTen),   (*rem = (num Minus 10 Times (num Div 10))*)
