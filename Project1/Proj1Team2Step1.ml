@@ -168,6 +168,9 @@ val ifElseInstruction : instruction =
 
 (*Last Line: val teamTwoProgram = (declist, programbody) : program *)
 
+val programBody : instruction = 
+    inst4([num_156, rem_0, sum_0, n_num, whileLoop, ifElseInstruction]);
+
 val teamTwoProgram =  (declarations,programBody): program;              
 
 
