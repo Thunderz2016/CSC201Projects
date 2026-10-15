@@ -2,21 +2,22 @@
 
 (* Sample 2: PROGRAM isHarshad
     {
-    num Integer;
-    rem Integer;
-    sum Integer;
-    n Integer;
-    result Boolean;
+        num Integer;
+        rem Integer;
+        sum Integer;
+        n Integer;
+        result Boolean;
 
-    num = 156;
-    rem = 0;
-    sum = 0;
-    n = num;
+        num = 156;
+        rem = 0;
+        sum = 0;
+        n = num;
+
     WHILE (num Gt 0)
     {
-    rem = (num Minus 10 Times (num Div 10));
-    sum = sum Plus rem;
-    num = num Div 10;
+        rem = (num Minus 10 Times (num Div 10));
+        sum = sum Plus rem;
+        num = num Div 10;
     }
 
     IF ((n Minus sum Times (n Div sum)) Eq 0) THEN result = True;
@@ -118,14 +119,14 @@ val whileLoopBoolExp : booleanExpression =
     boolExp3 (Gt, exp_num, int_0);
 
 val numDivTen : integerExpression =
-    intExp3 (Div, v_num, int_10);
+    intExp3 (Div, exp_num, int_10);
 val tenTimesNumDivTen : integerExpression =
     intExp3 (Times, int_10, numDivTen);
 val numMinusTenTimesNumDivTen : integerExpression =
-    intExp3 (Minus, v_num, tenTimesNumDivTen);  (*num Minus 10 Times (num Div 10)*)
+    intExp3 (Minus, exp_num, tenTimesNumDivTen);  (*num Minus 10 Times (num Div 10)*)
 
 val sumPlusRem : integerExpression =
-    intExp3 (Plus, v_sum, v_rem);
+    intExp3 (Plus, exp_num, exp_rem);
 
 val whileLoopInstList : instruction = 
     inst4 ([ inst2 (v_rem, numMinusTenTimesNumDivTen),   (*rem = (num Minus 10 Times (num Div 10))*)
