@@ -194,3 +194,30 @@ datatype typeInternal = IntRep | BoolRep | Not;
 
 (*4*)
 type SymbolTable = variable -> typeInternal
+
+(*5*)
+(* Symbol Table Initial - Nitin*)
+
+(*6*)
+(* Symbol Table AddOne - Nitin*)
+
+(*7*)
+(* Symbol Table Complete - Nitin*)
+
+(*8*)
+(* Valid Int Exp - Nitin*)
+
+(*9*)
+(* Valid Bool Exp *)
+
+(*10*)
+(* valid Instruction *)
+
+(*11*)
+(* Exception Invalid Declist *)
+
+(*12*)
+(* Exception Invalid Program *)
+
+(*13*)
+(* Valid Program *)
