@@ -208,16 +208,16 @@ type SymbolTable = variable -> typeInternal
 (* Valid Int Exp - Nitin*)
 
 (*9*)
-(* Valid Bool Exp *)
+(* Valid Bool Exp * - Wenshen)
 
 (*10*)
-(* valid Instruction *)
+(* valid Instruction * - Jose)
 
 (*11*)
-(* Exception Invalid Declist *)
+(* Exception Invalid Declist * - Jose)
 
 (*12*)
-(* Exception Invalid Program *)
+(* Exception Invalid Program * - Jose)
 
 (*13*)
-(* Valid Program *)
+(* Valid Program * - Jose)
