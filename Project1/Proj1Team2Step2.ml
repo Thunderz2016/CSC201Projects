@@ -208,16 +208,75 @@ type SymbolTable = variable -> typeInternal
 (* Valid Int Exp - Nitin*)
 
 (*9*)
-(* Valid Bool Exp * - Wenshen)
+(* Valid Bool Exp -Jose*)
+val rec validBoolExp =
+    ( fn (typemap:SymbolTable) =>
+        (fn DCBE1(x) => true 
+      |  DCBE2(y) => (typemap(y) = BoolRep) 
+      |  DCBE3 (relationalOp , iExp1 , iExp2)=>
+                        validIntExp (iExp1)(typemap) andalso
+                        validIntExp (iExp2)(typemap) 
+      |  DCBE4 (boolOp, boolExp1, boolExp2) =>
+                        validBoolExp(typemap)(boolExp1) andalso
+                        validBoolExp (typemap)(boolExp2)
+                    )
+                );
+val testTable : SymbolTable =
+    fn (var "num") => IntRep
+     | (var "sum") => IntRep
+     | (var "result") => BoolRep
+     | _ => Not;
+(*Testing for section 9*)
+val test9_1 = validBoolExp testTable(boolExp1 true);
+val test9_2 = validBoolExp testTable(boolExp2(var "result"));
+val test9_2 = validBoolExp testTable(boolExp2(var "num"));
+
 
 (*10*)
-(* valid Instruction * - Jose)
+(* valid Instruction - Jose *)
+val rec validInstruction =
+    ( fn Skip => ( fn (typemap: SymbolTable) => true) 
+        |DCI2( var, IntExp) => (fn(typemap:SymbolTable) =>
+                                (typemap(var)= IntRep) andalso
+                                validIntExp (IntExp)(typemap))
+        |DCI3 (var, boolExp) => (fn(typemap: SymbolTable) => 
+                                (typemap(var) = BoolRep) andalso
+                                validBoolExp (typemap)(boolExp))
+        |DCI4(intListHead :: intListTail) => ( fn( typemap: SymbolTable) => 
+                                                validInstruction(intListHead)(typemap) andalso
+                                                validInstruction( DCI4(intListTail))(typemap))
+        | DCI4([]) => ( fn (typemap: SymbolTable) => true) 
+        |DCI5 (truthbranch, falsebranch, boolExp) =>
+            (fn(typemap: SymbolTable) =>
+                validInstruction(truthbranch)(typemap) andalso
+                validInstruction(falsebranch)(typemap) andalso
+                validBoolExp (typemap)(boolExp))
+        |DCI6 (loopbody, boolExp) => ( fn (typemap: SymbolTable)=> 
+                                        validInstruction(loopbody)(typemap) andalso
+                                        validBoolExp(typemap)(boolExp))
+        );
 
+(*Testing for section 10*)
+val test10_1 = 
+    validInstruction 
+        (inst2(var "num", intExp1 10))
+        testTable;
 (*11*)
-(* Exception Invalid Declist * - Jose)
+(* Exception Invalid Declist - Jose *)
+Exception InvalidDecList
 
 (*12*)
-(* Exception Invalid Program * - Jose)
+(* Exception Invalid Program - Jose *)
+Exception InvalidProgram 
 
 (*13*)
-(* Valid Program * - Jose)
+(* Valid Program *)
+val validProgram =
+    (fn (decList, programBody): program =>
+    if validDecList(decList) <> true
+    then raise InvalidDecList
+    else 
+        if validInstruction(programBody)(SymbolTableComplete(decList))
+        then true 
+        else raise InvalidProgram 
+    );
