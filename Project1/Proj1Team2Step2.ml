@@ -177,95 +177,105 @@ val teamTwoProgram =  (declarations,programBody): program;
 (*------------Step Two------------*)
 
 (*Validity check for declaration list*)
-(*1. varNotInDecList*)
+(*1. varNotInDecList - Wenshen*)
 val rec varNotInDecList = (fn (x : variable) =>
                                 (fn ((y, z) :: decListTail) : declarationList =>
                                 (x <> y) andalso varNotInDecList (x) (decListTail) |
                                 ([]) => true)
                             );
 
-(*2. validDecList*)
+(*2. validDecList - Wenshen*)
 fun validDecList ([]) = true |
     validDecList ((x : variable, y : typeName) :: decListTail) =
         validDecList (decListTail) andalso varNotInDecList (x) (decListTail);
 
-(*3*)
+(*3 Type Internal - Wenshen*)
 datatype typeInternal = IntRep | BoolRep | Not;
 
-(*4*)
-type SymbolTable = variable -> typeInternal
+(*4 Symbol Table declaration - Wenshen*)
+type SymbolTable = variable -> typeInternal;
 
 (*5*)
 (* Symbol Table Initial - Nitin*)
-fun SymbolTableInitial(x : variable) = NotDecRep
+fun SymbolTableInitial(x : variable) = Not;
 
 (*6*)
-(* Symbol Table AddOne - Nitin*)
+(* Symbol Table AddOne - Nitin & Wenshen*)
 val SymbolTableAddOne =
-    (fn(oldmap:SymbolTable) =>
-        (fn ((x, TypeName1Boolean) : Declaration) =>
-            (fn(anyvar variable) =>
+    (fn(oldmap : SymbolTable) =>
+        (fn ((x : variable, TypeName1Boolean) : declaration) =>
+            (fn(anyvar : variable) =>
                 if anyvar = x then
                     BoolRep
                 else
                     oldmap(anyvar)
             )|
-        ((y,TypeName2Int) = Declaration) =>
-            (fn(anyvar varaible) =>
+        ((y : variable, TypeName2Integer) : declaration) =>
+            (fn (anyvar : variable) =>
                 if anyvar = y then
                     BoolRep
                 else
                     oldmap(anyvar)
             )
         )
-    )
+    );
+
 (*Testing for section 6*)
-val MySymbolTable1 = SymbolTableAddOne(SymbolTableInitial);
+val MySymbolTable1 = SymbolTableAddOne(SymbolTableInitial) ((v_num, TypeName2Integer));
 MySymbolTable1(v_num);
-list.map MySymbolTable1(tl declarations);
-val MySymbolTable2 = SymbolTableAddOne(MySymbolTable1);
+MySymbolTable1(v_rem);
+MySymbolTable1(v_sum);
+MySymbolTable1(v_n);
+MySymbolTable1(v_result);
+
+val MySymbolTable2 = SymbolTableAddOne(MySymbolTable1) (v_rem, TypeName2Integer);
 MySymbolTable2(v_num);
 MySymbolTable2(v_rem);
-list.map MySymbolTable1(tl(tl declarations));
+MySymbolTable2(v_sum);
+MySymbolTable2(v_n);
+MySymbolTable2(v_result);
 
 (*7*)
-(* Symbol Table Complete - Nitin*)
-fun SymbolTableComplete([]) => SymbolTableInitial |
-SymbolTableComplete((decListHead::decListTail)
-    SymbolTableAddOne : DeclarationList) =
-        (SymbolTableComplete(decListTail))
-        (decListHead)
+(* Symbol Table Complete - Nitin & Wenshen *)
+fun SymbolTableComplete([]) = SymbolTableInitial |
+    SymbolTableComplete((decListHead::decListTail) : declarationList) =
+        SymbolTableAddOne (SymbolTableComplete (decListTail)) (decListHead);
+
 (*Testing for section 7*)
-var MySymbolTable = SymbolTableComplete(validDecList);
-list.map MySymbolTable(declarations);
-MySymbolTable(notreal);
+val MySymbolTable = SymbolTableComplete(declarations);
+MySymbolTable(v_num);
+MySymbolTable(v_rem);
+MySymbolTable(v_sum);
+MySymbolTable(v_n);
+MySymbolTable(v_result);
+(* MySymbolTable(notreal); *)  (*var not in sample*)
 
 (*8*)
-(* Valid Int Exp - Nitin*)
-val rec ValidIntExp =
-    (fn (DCIE1(x)) => (fn(typemap : SymbolTable) => true) |
-        (DCIE2(y)) => (fn(typemap : SymbolTable) => (typemap(y) = IntRep)) |
-        (DCIE3(arithmaticOp, iExp1, iExp2) =>
+(* Valid Int Exp - Nitin & Wenshen*)
+val rec validIntExp =
+    (fn (intExp1 (x)) => (fn(typemap : SymbolTable) => true) |
+        (intExp2 (y)) => (fn(typemap : SymbolTable) => (typemap(y) = IntRep)) |
+        (intExp3 (arithmaticOp, iExp1, iExp2)) =>
             (fn(typemap : SymbolTable) =>
                 validIntExp(iExp1)(typemap) andalso validIntExp(iExp2)(typemap)
             )
-        )
-    )
+    );
 
 (*9*)
-(* Valid Bool Exp -Jose*)
+(* Valid Bool Exp -Jose & Wenshen*)
 val rec validBoolExp =
     ( fn (typemap:SymbolTable) =>
-        (fn DCBE1(x) => true 
-      |  DCBE2(y) => (typemap(y) = BoolRep) 
-      |  DCBE3 (relationalOp , iExp1 , iExp2)=>
-                        validIntExp (iExp1)(typemap) andalso
-                        validIntExp (iExp2)(typemap) 
-      |  DCBE4 (boolOp, boolExp1, boolExp2) =>
-                        validBoolExp(typemap)(boolExp1) andalso
-                        validBoolExp (typemap)(boolExp2)
-                    )
-                );
+        (fn (boolExp1(x)) => true 
+        |   (boolExp2(y)) => (typemap(y) = BoolRep) 
+        |   (boolExp3 (relationalOp , iExp1 , iExp2))=>
+                validIntExp (iExp1)(typemap) andalso
+                validIntExp (iExp2)(typemap) 
+        |   (boolExp4 (boolOp, bExp1, bExp2)) =>
+                validBoolExp(typemap)(bExp1) andalso
+                validBoolExp (typemap)(bExp2)
+        )
+    );
+
 val testTable : SymbolTable =
     fn (var "num") => IntRep
      | (var "sum") => IntRep
@@ -281,25 +291,25 @@ val test9_2 = validBoolExp testTable(boolExp2(var "num"));
 (* valid Instruction - Jose *)
 val rec validInstruction =
     ( fn Skip => ( fn (typemap: SymbolTable) => true) 
-        |DCI2( var, IntExp) => (fn(typemap:SymbolTable) =>
-                                (typemap(var)= IntRep) andalso
+        | (inst2(x, IntExp)) => (fn(typemap:SymbolTable) =>
+                                (typemap(x) = IntRep) andalso
                                 validIntExp (IntExp)(typemap))
-        |DCI3 (var, boolExp) => (fn(typemap: SymbolTable) => 
-                                (typemap(var) = BoolRep) andalso
-                                validBoolExp (typemap)(boolExp))
-        |DCI4(intListHead :: intListTail) => ( fn( typemap: SymbolTable) => 
+        | (inst3(y, BoolExp)) => (fn(typemap: SymbolTable) => 
+                                (typemap(y) = BoolRep) andalso
+                                validBoolExp (typemap)(BoolExp))
+        | (inst4(intListHead :: intListTail)) => ( fn( typemap: SymbolTable) => 
                                                 validInstruction(intListHead)(typemap) andalso
-                                                validInstruction( DCI4(intListTail))(typemap))
-        | DCI4([]) => ( fn (typemap: SymbolTable) => true) 
-        |DCI5 (truthbranch, falsebranch, boolExp) =>
+                                                validInstruction( inst4(intListTail))(typemap))
+        | (inst4([])) => ( fn (typemap: SymbolTable) => true) 
+        | (inst5 (truthbranch, falsebranch, boolExp)) =>
             (fn(typemap: SymbolTable) =>
                 validInstruction(truthbranch)(typemap) andalso
                 validInstruction(falsebranch)(typemap) andalso
                 validBoolExp (typemap)(boolExp))
-        |DCI6 (loopbody, boolExp) => ( fn (typemap: SymbolTable)=> 
+        | (inst6 (loopbody, boolExp)) => ( fn (typemap: SymbolTable)=> 
                                         validInstruction(loopbody)(typemap) andalso
                                         validBoolExp(typemap)(boolExp))
-        );
+    );
 
 (*Testing for section 10*)
 val test10_1 = 
@@ -308,11 +318,11 @@ val test10_1 =
         testTable;
 (*11*)
 (* Exception Invalid Declist - Jose *)
-Exception InvalidDecList
+exception InvalidDecList;
 
 (*12*)
 (* Exception Invalid Program - Jose *)
-Exception InvalidProgram 
+exception InvalidProgram;
 
 (*13*)
 (* Valid Program *)
