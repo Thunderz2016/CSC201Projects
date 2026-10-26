@@ -197,15 +197,60 @@ type SymbolTable = variable -> typeInternal
 
 (*5*)
 (* Symbol Table Initial - Nitin*)
+fun SymbolTableInitial(x : variable) = NotDecRep
 
 (*6*)
 (* Symbol Table AddOne - Nitin*)
+val SymbolTableAddOne =
+    (fn(oldmap:SymbolTable) =>
+        (fn ((x, TypeName1Boolean) : Declaration) =>
+            (fn(anyvar variable) =>
+                if anyvar = x then
+                    BoolRep
+                else
+                    oldmap(anyvar)
+            )|
+        ((y,TypeName2Int) = Declaration) =>
+            (fn(anyvar varaible) =>
+                if anyvar = y then
+                    BoolRep
+                else
+                    oldmap(anyvar)
+            )
+        )
+    )
+(*Testing for section 6*)
+val MySymbolTable1 = SymbolTableAddOne(SymbolTableInitial);
+MySymbolTable1(v_num);
+list.map MySymbolTable1(tl declarations);
+val MySymbolTable2 = SymbolTableAddOne(MySymbolTable1);
+MySymbolTable2(v_num);
+MySymbolTable2(v_rem);
+list.map MySymbolTable1(tl(tl declarations));
 
 (*7*)
 (* Symbol Table Complete - Nitin*)
+fun SymbolTableComplete([]) => SymbolTableInitial |
+SymbolTableComplete((decListHead::decListTail)
+    SymbolTableAddOne : DeclarationList) =
+        (SymbolTableComplete(decListTail))
+        (decListHead)
+(*Testing for section 7*)
+var MySymbolTable = SymbolTableComplete(validDecList);
+list.map MySymbolTable(declarations);
+MySymbolTable(notreal);
 
 (*8*)
 (* Valid Int Exp - Nitin*)
+val rec ValidIntExp =
+    (fn (DCIE1(x)) => (fn(typemap : SymbolTable) => true) |
+        (DCIE2(y)) => (fn(typemap : SymbolTable) => (typemap(y) = IntRep)) |
+        (DCIE3(arithmaticOp, iExp1, iExp2) =>
+            (fn(typemap : SymbolTable) =>
+                validIntExp(iExp1)(typemap) andalso validIntExp(iExp2)(typemap)
+            )
+        )
+    )
 
 (*9*)
 (* Valid Bool Exp -Jose*)
