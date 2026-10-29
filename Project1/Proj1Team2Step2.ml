@@ -309,7 +309,8 @@ val test8_2_goodVar = validIntExp (intExp2 v_num) (testTable);
 val test8_3_badVar = validIntExp (intExp2 v_result) (testTable);   (*v_result is a boolExp*)
 
 (*Good binary: 1 + 2*)
-val goodIntBinary : integerExpression = intExp3 (Plus, intExp1 1, intExp1 2);
+(* val goodIntBinary : integerExpression = intExp3 (Plus, intExp1 1, intExp1 2); *)
+val goodIntBinary : integerExpression = intExp3 (Plus, intExp2 v_num, intExp2 v_sum);
 val test8_4_goodBin = validIntExp (goodIntBinary) (testTable);
 
 (*Bad binary: intExp + boolExp*)
