@@ -308,8 +308,7 @@ val test8_2_goodVar = validIntExp (intExp2 v_num) (testTable);
 (*Bad variable: boolExp instead of intExp*)
 val test8_3_badVar = validIntExp (intExp2 v_result) (testTable);   (*v_result is a boolExp*)
 
-(*Good binary: 1 + 2*)
-(* val goodIntBinary : integerExpression = intExp3 (Plus, intExp1 1, intExp1 2); *)
+(*Good binary: num + sum*)
 val goodIntBinary : integerExpression = intExp3 (Plus, intExp2 v_num, intExp2 v_sum);
 val test8_4_goodBin = validIntExp (goodIntBinary) (testTable);
 
@@ -449,7 +448,16 @@ type MemoryProgState = variable -> MemoryValue;
 (*3. MemoryProgStateInitial: MemoryProgState*)
 fun MemoryProgStateInitial (v : variable) = UnknownTrash;
 
-(*TODO: Testing for section 3*)
+(*Testing for section 3*)
+print("\n--------Testing Step 3 Sec 3---------\n");
+MemoryProgStateInitial (v_num);
+MemoryProgStateInitial (v_rem);
+MemoryProgStateInitial (v_sum);
+MemoryProgStateInitial (v_n);
+MemoryProgStateInitial (v_result);
+
+print("\n--------End Testing Step 3 Sec 3---------\n");
+
 
 (*4. MemoryProgStateChangeOne: MemoryProgState -> MemoryValue -> variable -> variable -> MemoryValue*)
 val MemoryProgStateChangeOne =  (fn (oldMemory : MemoryProgState) =>
